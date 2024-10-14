@@ -1,0 +1,156 @@
+#include <iostream>
+using namespace std;
+
+//int SIZE = 5;
+
+
+void BubbleSort(int arr[]) { //пузырек по очереди сранивает элементы которые стоят рядом и свапает их местами делая сортировку в порядке возрастания
+    cout << "Sort by bubble ->" << endl;
+    bool flag = false;
+    for (int i = 0; i < 5 - i; i++) {
+        flag = true;
+        for (int j = 0; j < 5 - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                swap(arr[j], arr[j + 1]);
+                flag = false;
+            }
+        }
+        if (flag) break;
+    }
+
+
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void InsertSort(int arr[]) { //вставками - проходит по массиву слева направо и отсортировывает путем выставления элементов на свое место,
+    cout << "Sort by insert ->" << endl;
+    for (int i = 1; i < 5; i++) {//делит массив на отсортированную и не отсортированную часть
+        for (int j = i; j > 0; j--) {
+            if (arr[j] < arr[j - 1]) {
+                swap(arr[j], arr[j - 1]);
+
+            }
+            else {
+                break;
+            }
+        }
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void QuickSort(int arr[], int start, int end) {//быстрая - делит массив на 2 подмассива и уже потом рекурсивно отсортировывает каждый, для этого
+    cout << "Sort by quickSort ->" << endl;//выбирается опорный элемент, как самый левый или правый
+    if (start < end) { 
+        int opora = arr[end];
+        int index = start - 1;
+
+        for (int j = start; j < end; j++) {
+            if (arr[j] <= opora) {
+                index++;
+                swap(arr[index], arr[j]);
+            }
+        }
+        swap(arr[index + 1], arr[end]); // Перемещаем опорный элемент на правильную позицию
+        int Pindex = index + 1; // Индекс опоры
+
+        // Рекурсивно сортируем элементы до и после опорного элемента
+        QuickSort(arr, start, Pindex - 1);
+        QuickSort(arr, Pindex + 1, end);
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void MergeSort(int arr[], int size) { //слиянием - делит массив пополам, подмассивы сортируются и потом соединяются, каждый подмассив разделяем еще на
+    cout << "Sort by merge ->" << endl;// два подмассива, пока в каждом не окажется по 1 элементу
+
+    if (size < 2) return;
+    int MidArr = size / 2; //середина массива
+    int* RightArr = new int[size - MidArr]; //правая часть (Временные)
+    int* LeftArr = new int[MidArr]; //левая часть
+
+    for (int i = 0; i < MidArr; i++) LeftArr[i] = arr[i]; //заполняем левый и правый массив
+    for (int j = MidArr; j < size; j++) RightArr[j - MidArr] = arr[j];
+
+    MergeSort(LeftArr, MidArr); // сортируем каждую половину вызывая рекурсию
+    MergeSort(RightArr, size - MidArr);
+
+    int index = 0, j = 0, k = 0; //создаем индекс для правого, левого и самого массива
+
+
+    while (index < MidArr && j < size - MidArr) //соединяем подмассивы в полный массив
+    {
+        if (LeftArr[index] <= RightArr[j]) arr[k++] = LeftArr[index++];
+        else arr[k++] = RightArr[j++];
+    }
+
+    while (index < MidArr) // если есть остаточные элементы, копируем их из правого и левого массивов
+    {
+        arr[k++] = LeftArr[index++];
+    }
+
+    while (j < size - MidArr) 
+    {
+        arr[k++] = RightArr[j++];
+    }
+
+    delete[] LeftArr; //удаляем оба массива ибо они временные
+    delete[] RightArr;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+int binarySearch(int arr[], int size, int el) {//бинарный поиск - делит массив элементов на 2 каждый раз, пока не найдет нужный элемент
+    cout << "binary search ->" << endl;
+    int right = size - 1; //индекс границ границы
+    int left = 0;
+    //int mid = left + (right - left) / 2;
+
+    while (left <= right) {
+        int mid = left + (right - left) / 2; // средний индекс по массиву
+
+        if (arr[mid] == el) {
+            return mid;
+        }
+
+        else if (arr[mid] < el) {
+            left = mid + 1;
+        }
+        else {
+            right = mid - 1;
+        }
+    }
+
+    return -1; //если элемент который ищем отсутствует в массиве
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void ShowArr(int arr[])
+{
+	for (int i = 0; i < 5; i++)
+	{
+		cout << arr[i] << " ";
+	}
+	cout << endl;
+}
+
+
+
+int main()
+{
+    //cout << "Hello World!\n";
+	int arr[] = { 1,5,9,-2,4};
+	ShowArr(arr);
+    //BubbleSort(arr);
+    //InsertSort(arr);
+    //QuickSort(arr,0,4);
+    //MergeSort(arr,5);
+    binarySearch(arr, 5, 9);
+    ShowArr(arr);
+}
+
+
